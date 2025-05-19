@@ -1,0 +1,99 @@
+Retrieval-Augmented Generation (RAG) is an architecture that enhances language model output by retrieving relevant documents from a knowledge base before answering a query. It combines a retriever and a generator model.
+
+RAG systems are particularly useful for tasks requiring up-to-date or domain-specific information, such as customer support, document Q&A, legal search, and medical diagnostics.
+
+A vector database stores document chunks as dense vectors (embeddings) and enables similarity search using distance metrics like cosine similarity. Examples include FAISS, Chroma, Pinecone, and Weaviate.
+
+LangChain is a Python framework that makes it easy to build LLM applications that use external data sources and tools. It supports agents, chains, document loaders, embeddings, and vector stores.
+
+The typical RAG pipeline involves:
+1. Chunking documents into small passages.
+2. Embedding these passages using a model like all-MiniLM-L6-v2.
+3. Storing them in a vector store such as FAISS.
+4. At query time, retrieving top-k similar chunks.
+5. Feeding those chunks along with the query into a language model like Flan-T5 or GPT.
+
+Flan-T5 is a family of open-source transformer models fine-tuned for instruction-following tasks. The base version is small and fast enough to run locally while producing strong performance.
+
+All-MiniLM-L6-v2 is a popular embedding model from SentenceTransformers. It is small, fast, and produces 384-dimensional embeddings suitable for semantic search.
+
+FAISS (Facebook AI Similarity Search) is a high-performance library for vector similarity search and clustering of dense vectors. It is commonly used for RAG pipelines due to its speed and scalability.
+
+Document chunking strategies include character-based, sentence-based, or semantic chunking. The goal is to preserve context without exceeding model input limits.
+
+Retrievers rank the document chunks based on their semantic similarity to the user query. Generators use the retrieved chunks to generate a coherent, grounded answer.
+
+LangChain supports multiple embedding and LLM providers, including HuggingFace, OpenAI, Cohere, and Azure. It provides abstractions for building QA systems, chatbots, and tools-based agents.
+
+Advantages of RAG include grounding answers in known facts, reducing hallucinations, enabling domain adaptation, and improving explainability by citing source documents.
+One of the key design principles in RAG is grounding the generated output in external knowledge, which helps mitigate hallucinations and improves factual accuracy.
+
+Common RAG use cases include:
+- Customer support bots that reference internal documentation
+- Legal assistants that answer queries based on laws or contracts
+- Academic assistants that answer questions from lecture notes or textbooks
+- Health tech tools that summarize patient records or explain medical research
+
+While large language models are powerful, they can suffer from hallucination—generating plausible but incorrect information. RAG mitigates this by anchoring responses in retrievable source documents.
+
+Good chunking practices are critical. Overlapping chunks (e.g., 500 characters with 50-character overlap) ensure continuity and reduce loss of context at boundaries.
+
+Sentence-based and semantic chunking can provide higher accuracy but are more computationally expensive than simple character-based chunking.
+
+Embeddings capture the semantic meaning of a text chunk in a dense vector form. These vectors are then used to perform similarity search in a vector database.
+
+In semantic search, cosine similarity is commonly used to compare embeddings. A cosine score closer to 1.0 indicates a high degree of similarity.
+
+Open-source embedding models like all-MiniLM, E5, and Instructor-XL are widely used due to their balance of speed and accuracy.
+
+LangChain’s `RetrievalQA` chain is a popular component that allows seamless integration of retrieval with an LLM to answer questions based on source documents.
+
+Chroma is a fast and easy-to-use vector store that supports persistent storage, collection filtering, and metadata management. It is an alternative to FAISS.
+
+For high-performance and large-scale applications, cloud vector stores like Pinecone, Weaviate, and Qdrant offer managed solutions with advanced features.
+
+LLMs like Flan-T5 and Mistral are well-suited for on-device or edge RAG applications due to their relatively small model size.
+
+You can enhance the transparency of a RAG system by returning not just the final answer, but also the source document chunks used to generate that answer.
+
+Document metadata (e.g., filename, section title, date) can be stored alongside embeddings to filter or prioritize retrieval.
+
+The accuracy of RAG systems heavily depends on embedding quality, chunking strategy, and relevance of the underlying documents.
+
+Fine-tuning is not strictly necessary in RAG. You can adapt a general-purpose LLM to your domain just by customizing the documents in your knowledge base.
+Prompt engineering is the process of designing input prompts to guide the behavior of a language model. In RAG, prompts can include retrieved context followed by the question.
+
+A typical RAG prompt might look like:
+"Context: [retrieved document chunks] \n\n Question: [user question] \n\n Answer:"
+
+Chain-of-Thought prompting encourages the model to reason step by step. This is especially useful in RAG when multiple retrieved chunks must be synthesized.
+
+Evaluating RAG system performance can involve metrics like answer accuracy, relevance of retrieved documents, and citation correctness.
+
+Human evaluation is often the most reliable way to judge RAG responses, particularly in complex domains like law, healthcare, and education.
+
+When multiple documents are retrieved, the order in which they’re passed to the LLM can affect the output. It's common to sort them by similarity score or recency.
+
+Limiting the number of retrieved chunks (top-k retrieval) is important for staying within LLM token limits. Typical values for k range from 3 to 10 depending on model context window.
+
+Using metadata filters (like document type or section) during retrieval can improve relevance and precision, especially in multi-domain knowledge bases.
+
+Hybrid retrieval combines dense embeddings with keyword-based search (BM25). This is useful when embeddings alone are insufficient for precision.
+
+Multi-vector retrieval stores multiple embeddings per document, such as one per sentence or paragraph. This improves recall but increases storage cost.
+
+It’s important to sanitize and clean text data before embedding. This includes removing boilerplate, correcting encoding issues, and normalizing whitespace.
+
+Real-world RAG implementations include Google’s Search-Augmented Bard, Meta’s RAG paper, and enterprise tools like Notion AI, Perplexity AI, and ChatPDF.
+
+Privacy and data leakage are critical concerns in RAG systems. Avoid embedding sensitive data or exposing raw chunks in answers without sanitization.
+
+In high-risk domains, RAG responses should include disclaimers, source citations, and confidence scores to support safe human review.
+
+Context window limitations of models like Flan-T5 or GPT-3.5 can truncate long inputs. Use chunk ranking or summarization to prioritize the most relevant content.
+
+A RAG system is only as good as its documents. Garbage in, garbage out. Always curate, clean, and validate your knowledge base before indexing.
+
+Open-domain RAG systems require diverse and high-quality content, while closed-domain RAG (e.g., company internal tools) benefit from smaller, focused corpora.
+
+Streaming retrieval is an emerging approach where document chunks are retrieved dynamically as the LLM generates output, enabling real-time contextual grounding.
